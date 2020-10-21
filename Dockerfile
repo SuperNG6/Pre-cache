@@ -1,16 +1,8 @@
-FROM centos:7
-WORKDIR /opt/
-RUN rm -rf /etc/yum.repos.d/* \
-        && curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.163.com/.help/CentOS7-Base-163.repo \
-        && curl -o /etc/yum.repos.d/CentOS-epel.repo http://mirrors.aliyun.com/repo/epel-7.repo \
-        && rpm --import http://mirrors.163.com/centos/RPM-GPG-KEY-CentOS-7 \
-        && yum clean all  \
-        && yum makecache \
-        && yum install -y python-pip \
-	&& yum clean all \
-	&& rm -rf /var/cache/yum/*
-RUN pip install --upgrade pip -i https://mirrors.aliyun.com/pypi/simple/
+FROM python:3.7.6
+
+LABEL maintainer="NG6"
+
 COPY . .
-RUN pip install -r /opt/requirements.txt -i https://mirrors.aliyun.com/pypi/simple/ \
+RUN pip install -r /opt/requirements.txt \
     && rm -rf ~/.cache/pip/* 
 ENTRYPOINT ["/usr/bin/python","/opt/pre_cache.py"]
